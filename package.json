@@ -1,15 +1,26 @@
 {
   "scripts": {
-    "start": "source .env && nodemon app"
+    "start": "source .env && nodemon app",
+		"everything": "source .env && npx prisma db push && nodemon app",
+		"migrate": "source .env && npx prisma migrate dev",
+		"introspect": "source .env && npx prisma introspect",
+		"studio": "source .env && npx prisma studio"
   },
   "dependencies": {
+    "@prisma/client": "^2.26.0",
+    "@slack/web-api": "^6.2.4",
+    "celebrate": "^14.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-validator": "^6.12.0",
     "helmet": "^4.6.0",
-    "rc": "^1.2.8"
+    "needle": "^2.7.0",
+    "rc": "^1.2.8",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
-    "eslint": "^7.30.0"
+    "eslint": "^7.30.0",
+    "prisma": "^2.26.0"
   },
   "name": "wall-of-love",
   "version": "1.0.0",
