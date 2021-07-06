@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "start": "source .env && nodemon app"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "rc": "^1.2.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.30.0"
+  },
+  "name": "wall-of-love",
+  "version": "1.0.0",
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "engines": {
+    "node": "v16.0.0"
+  }
+}
