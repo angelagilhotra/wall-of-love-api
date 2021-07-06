@@ -1,16 +1,16 @@
-const helmet = require('helmet')
 const express = require('express')
-const cors = require('cors')
-const conf = require('rc')('app', {
-	port: process.env.PORT || 3000
-})
+const config = require('./config')
+const Loader = require('./loaders')
+const Logger = require('./loaders/logger')
 
-const app = express()
-app.use(express.json({ limit: '50mb' }))
-app.use(cors())
-app.use(helmet())
-
-app.listen(conf.port, () => {
-	console.log(`app listening on port: ${conf.port}`)
-})
-console.log (conf)
+async function startServer () {
+	const app = express()
+	await Loader(app)
+	app.listen(config.port, () => {
+		Logger.info(`Server listening on port: ${config.port}`)
+	}).on('error', err => {
+		Logger.error(err)
+		process.exit(1)
+	})
+}
+startServer()
