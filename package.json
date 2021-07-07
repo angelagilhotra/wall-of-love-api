@@ -1,10 +1,11 @@
 {
   "scripts": {
     "start": "source .env && nodemon app",
-		"everything": "source .env && npx prisma db push && nodemon app",
-		"migrate": "source .env && npx prisma migrate dev",
-		"introspect": "source .env && npx prisma introspect",
-		"studio": "source .env && npx prisma studio"
+    "everything": "source .env && npx prisma db push && nodemon app",
+    "migrate": "source .env && npx prisma migrate dev",
+    "introspect": "source .env && npx prisma introspect",
+    "studio": "source .env && npx prisma studio",
+		"push": "source .env && npx prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^2.26.0",
