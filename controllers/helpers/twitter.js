@@ -1,15 +1,19 @@
-const config = require('../../config')
+import { config } from '../../config/index.js'
 const twitterLookupEndpoint = 'https://api.twitter.com/2/tweets/'
 const twitterBearerToken = config.twitter.bearer_token
-const needle = require('needle')
+import needle from 'needle'
 
-function fetchTweetIdFromUrl(url) {
+export function fetchTweetIdFromUrl(url) {
 	let r = url.split('/')
 	let c = r.findIndex(el => el == 'status')
 	return r[c+1]
 }
 
-async function fetchFromTwitter(id, text, image) {
+export async function fetchFromTwitter({
+	id,
+	text,
+	image
+}) {
 	const params = {
 		'expansions': 'author_id',
 		'user.fields': 'profile_image_url'
@@ -25,8 +29,4 @@ async function fetchFromTwitter(id, text, image) {
 		author: r['body']['includes']['users'][0]['username'],
 		text: text? text: r['body']['data']['text']
 	}
-}
-
-module.exports = {
-	fetchTweetIdFromUrl, fetchFromTwitter
 }

@@ -1,8 +1,8 @@
 // import config
-const config = require('../../config')
+import { config } from '../../config/index.js'
 
 // initialise constants
-const { WebClient } = require('@slack/web-api')
+import { WebClient } from '@slack/web-api'
 const slackBotToken = config.slack.bot_token
 const slackClient = new WebClient(slackBotToken)
 
@@ -14,11 +14,13 @@ const slackClient = new WebClient(slackBotToken)
  * @param {string} o_image overriden image
  * @returns { image: image of author, author: author name, text: text of the message }
  */
-async function fetchSlackMessage(conversationId, messageId, o_text, o_image) {
+export async function fetchSlackMessage({
+	conversationId, messageId, o_text, o_image
+}) {
 	let r = await slackClient.conversations.history({
-		channel: conversationId, 
+		channel: conversationId,
 		inclusive: true,
-		limit: 1, 
+		limit: 1,
 		latest: messageId,
 		oldest: messageId
 	})
@@ -39,15 +41,15 @@ async function fetchSlackMessage(conversationId, messageId, o_text, o_image) {
 
 	if (r.ok) {
 		return {image, author, text}
-	} else return 'error' 
+	} else return 'error'
 }
 
 /**
- * 
+ *
  * @param {string} url url of a message from slack
  * @returns {conversationid: channel id, messageId: timestamp}
  */
-function fetchSlackConversationAndMessageId (url) {
+export function fetchSlackConversationAndMessageId (url) {
 	let r = url.split('/')
 	let c = r.findIndex(el => el == 'archives')
 	let messageId = (r[c+2].replace('p', '') * 0.000001).toFixed(6)
@@ -68,8 +70,4 @@ async function replaceMentionedUsers(text) {
 		t = t.replace('<@' + user + '>', name)
 	}
 	return t
-}
-
-module.exports = {
-	fetchSlackMessage, fetchSlackConversationAndMessageId
 }
