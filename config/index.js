@@ -1,6 +1,8 @@
-const conf = require('rc')('app')
+import Config from 'rc'
+const conf = Config('app')
+// import conf from ('rc')('app')
 
-module.exports = {
+export const config = {
 	port: process.env.PORT || 3000,
 	...conf
 }

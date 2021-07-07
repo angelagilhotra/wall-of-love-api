@@ -1,7 +1,7 @@
-const expressLoader = require('./express')
-const Logger = require('./logger')
+import expressLoader from './express.js'
+import { LoggerInstance as Logger } from './logger.js'
 
-module.exports = async (app) => {
+export default async (app) => {
 	await expressLoader(app)
 	Logger.info('✌️ Express loaded')
 }

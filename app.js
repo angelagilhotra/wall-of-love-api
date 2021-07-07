@@ -1,7 +1,7 @@
-const express = require('express')
-const config = require('./config')
-const Loader = require('./loaders')
-const Logger = require('./loaders/logger')
+import express from 'express'
+import { config } from './config/index.js'
+import Loader from './loaders/index.js'
+import { LoggerInstance as Logger } from './loaders/logger.js'
 
 async function startServer () {
 	const app = express()

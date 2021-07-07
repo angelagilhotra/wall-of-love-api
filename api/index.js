@@ -1,8 +1,8 @@
-const { Router } = require('express')
-const wol = require('./routes/wol')
+import { Router } from 'express'
+import { wol } from './routes/wol.js'
 
-module.exports = () => {
+export default () => {
 	const app = Router()
-	wol(app)
+	wol (app)
 	return app
 }
