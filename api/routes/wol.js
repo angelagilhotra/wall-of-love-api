@@ -2,7 +2,7 @@
 import { Router } from 'express'
 import { body, validationResult } from 'express-validator'
 import { LoggerInstance as Logger } from '../../loaders/logger.js'
-import { parseAndUploadTestimonials, fetchTestimonialsRaw } from '../../controllers/TestimonialController.js'
+import { parseAndUploadTestimonials, fetchTestimonialsRaw } from '../../controllers/testimonials.js'
 
 const route = Router()
 
