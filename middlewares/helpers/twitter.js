@@ -25,7 +25,7 @@ export async function fetchFromTwitter({
 		}
 	})
 	return {
-		image: image? image : r['body']['includes']['users'][0]['profile_image_url'],
+		image: image? image : r['body']['includes']['users'][0]['profile_image_url'].replace('normal', 'bigger'),
 		author: r['body']['includes']['users'][0]['username'],
 		text: text? text: r['body']['data']['text']
 	}
