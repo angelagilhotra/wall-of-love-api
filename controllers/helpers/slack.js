@@ -66,8 +66,8 @@ async function replaceMentionedUsers(text) {
 		}
 	}
 	for (let user of mentionedUsers) {
-		let name = (await slackClient.users.info({ user }))['user']['real_name']
-		t = t.replace('<@' + user + '>', name)
+		let name = (await slackClient.users.info({ user }))['user']['real_name'].replace(/ /g, '')
+		t = t.replace('<@' + user + '>', '@' + name)
 	}
 	return t
 }
