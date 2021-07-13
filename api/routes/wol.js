@@ -3,9 +3,9 @@ import { Router } from 'express'
 // import { body, validationResult } from 'express-validator'
 // import { LoggerInstance as Logger } from '../../loaders/logger.js'
 import { parseAndRespond } from '../../middlewares/parseAndRespond.js'
-import { parseAndUploadTestimonials, fetchTestimonialsRaw } from '../../middlewares/testimonials.js'
+import { parseAndUploadTestimonials, fetchTestimonialsRaw, updateStale } from '../../middlewares/testimonials.js'
 import { respondToSlackChallenge, slackConfiguration } from '../../middlewares/slackWorkflow.js'
-import {uploadTestimonialToAirtable} from '../../middlewares/airtableFunctions.js'
+import { uploadTestimonialToAirtable } from '../../middlewares/airtableFunctions.js'
 
 const route = Router()
 
@@ -19,6 +19,8 @@ export function wol (app) {
 	})
 	/**
 	 * POST to upload testimonial to the Database
+	 * @note only purpose is to keep heroku DB in sync with airtable table
+	 * runs every 15 mins from airtable automation
 	 */
 	route.post(
 		'/new',
@@ -29,6 +31,22 @@ export function wol (app) {
 		parseAndUploadTestimonials,
 		parseAndRespond
 	)
+
+	/**
+	 * POST to mark testimonials as stale (deleted from airtable)
+	 * runs every 15 mins from airtable automation
+	 * marks all record ids that are not present on airtable table as stale: true
+	 */
+	route.post('/sync',
+		async (req, res, next) => {
+			// expects array of record ids in 'data' field
+			req.testimonialRecordIds = req.body['data']
+			next()
+		},
+		updateStale,
+		parseAndRespond
+	)
+
 	/**
 	 * GET to fetch all testimonials, all columns
 	 * @todo add pagination

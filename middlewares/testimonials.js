@@ -2,6 +2,7 @@
 import { fetchSlackConversationAndMessageId, fetchSlackMessage } from './helpers/slack.js'
 import { fetchFromTwitter, fetchTweetIdFromUrl } from './helpers/twitter.js'
 import Prisma from '@prisma/client'
+import {LoggerInstance as Logger} from '../loaders/logger.js'
 const { PrismaClient } = Prisma
 const prisma = new PrismaClient()
 
@@ -58,6 +59,7 @@ const parseSource = async (obj) => {
  * find a testimonial in the local database
  * if found - update
  * if not found - create new
+ * find happens via 'id'
  * @param {array} data array of testimonial objects
  */
 const upload = async (data) => {
@@ -72,14 +74,14 @@ const upload = async (data) => {
 				url: testimonial.link,
 				author_name: testimonial.author,
 				text: testimonial.text,
-				author_image: testimonial.image,
+				author_image: testimonial.image
 			},
 			update: {
 				source: testimonial.source,
 				url: testimonial.link,
 				author_name: testimonial.author,
 				text: testimonial.text,
-				author_image: testimonial.image,
+				author_image: testimonial.image
 			}
 		})
 	}
@@ -89,8 +91,34 @@ export const fetchTestimonialsRaw = async (req, res, next) => {
 	const data = await prisma.testimonials.findMany({
 		orderBy:{
 			id: 'asc'
+		},
+		where: {
+			stale: false
 		}
 	})
+	req.responsePayload = data
+	next()
+}
+
+export const updateStale = async (req, res, next) => {
+	// mark stale: true for all records
+	await prisma.testimonials.updateMany({
+		data: { stale: true }
+	})
+	// mark stale: false for given record Ids
+	let data = []
+	for (const recordId of req.testimonialRecordIds) {
+		try {
+			data.push(await prisma.testimonials.update({
+				where: { id: recordId },
+				data: { stale: false },
+				select: { id: true }
+			}))
+		} catch (err) {
+			Logger.error(err)
+			Logger.error('error on update')
+		}
+	}
 	req.responsePayload = data
 	next()
 }

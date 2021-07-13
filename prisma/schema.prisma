@@ -11,7 +11,8 @@ model testimonials {
   id           String @id
   source       String? @db.VarChar
   url          String? @db.VarChar
-	author_name   String? @db.VarChar
+	author_name  String? @db.VarChar
   text         String? @db.VarChar
   author_image String? @db.VarChar
+	stale				 Boolean @db.Boolean @default(true)
 }
