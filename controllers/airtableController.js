@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { createRow } from '../services/airtable';
+import { createRow } from '../services/airtable.js';
 /**
  * upload testimonials to airtable
  */

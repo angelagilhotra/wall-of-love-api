@@ -1,5 +1,5 @@
-import expressLoader from './express';
-import Logger from './logger';
+import expressLoader from './express.js';
+import Logger from './logger.js';
 
 export default async (app) => {
   await expressLoader(app);

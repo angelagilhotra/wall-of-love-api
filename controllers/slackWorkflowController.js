@@ -1,5 +1,5 @@
-import viewModal from './helpers/configureWOL';
-import { openView, updateConfigurationView, generateInputs } from '../services/slack';
+import viewModal from './helpers/configureWOL.js';
+import { openView, updateConfigurationView, generateInputs } from '../services/slack.js';
 
 /**
  * respond to slack challenge api call - done to verify if the endpoint is working

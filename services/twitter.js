@@ -1,5 +1,5 @@
 import needle from 'needle';
-import config from '../config';
+import config from '../config/index.js';
 
 const twitterLookupEndpoint = 'https://api.twitter.com/2/tweets/';
 const twitterBearerToken = config.twitter.bearer_token;

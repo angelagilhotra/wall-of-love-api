@@ -5,14 +5,14 @@ import {
   fetchRaw,
   markTestimonialsNotStale,
   markAllTestimonialsStale,
-} from '../services/testimonial';
+} from '../services/testimonial.js';
 
 export const parseAndUploadTestimonials = async (req, res, next) => {
   const data = [];
-  req.testimonials.forEach(async (obj) => {
-    const testimonialObject = parseAndGenerateObject(obj);
+	for (const obj of req.testimonials) {
+		const testimonialObject = parseAndGenerateObject(obj);
     data.push(await parseSource(testimonialObject));
-  });
+	}
   await upload(data);
   req.responsePayload = data;
   next();
@@ -27,6 +27,6 @@ export const updateStale = async (req, res, next) => {
   // mark stale: true for all records
   await markAllTestimonialsStale();
   // mark stale: false for given record Ids
-  req.responsePayload = markTestimonialsNotStale(req.testimonialRecordIds);
+  req.responsePayload = markTestimonialsNotStale({recordIds: req.testimonialRecordIds});
   next();
 };

@@ -1,7 +1,7 @@
 import Prisma from '@prisma/client';
-import { fetchSlackConversationAndMessageId, fetchSlackMessage } from './slack';
-import { fetchFromTwitter, fetchTweetIdFromUrl } from './twitter';
-import Logger from '../loaders/logger';
+import { fetchSlackConversationAndMessageId, fetchSlackMessage } from './slack.js';
+import { fetchFromTwitter, fetchTweetIdFromUrl } from './twitter.js';
+import Logger from '../loaders/logger.js';
 
 const { PrismaClient } = Prisma;
 const prisma = new PrismaClient();
@@ -17,21 +17,14 @@ export const parseAndGenerateObject = (obj) => {
     override_image: '',
     source: '',
   };
-  // const keys = Object.keys(testimonialObject);
-  Object.keys(testimonialObject).forEach((tKey) => {
-    testimonialObject[tKey] = obj[tKey];
-  });
-  // for (const key of keys) {
-  //   testimonialObject[key] = obj[key];
-  // }
-  supportedFormats.forEach((source) => {
-    if (obj.link.includes(source)) {
-      testimonialObject.source = source;
-    }
-  });
-  // for (const source of supportedFormats) {
-  //   if (obj.link.includes(source)) testimonialObject.source = source;
-  // }
+  const keys = Object.keys(testimonialObject);
+  for (const key of keys) {
+    testimonialObject[key] = obj[key];
+  }
+  for (const source of supportedFormats) {
+    if (obj.link.includes(source)) testimonialObject.source = source;
+  }
+	return testimonialObject
 };
 
 export const parseSource = async (obj) => {
@@ -102,18 +95,18 @@ export const fetchRaw = async () => prisma.testimonials.findMany({
 
 export const markTestimonialsNotStale = async ({ recordIds }) => {
   const data = [];
-  recordIds.testimonialRecordIds.forEach(async (rec) => {
-    try {
-      data.push(await prisma.testimonials.update({
-        where: { id: rec },
-        data: { stale: false },
-        select: { id: true },
-      }));
-    } catch (err) {
-      Logger.error(err);
-      Logger.error('error on update');
-    }
-  });
+	for (const rec of recordIds) {
+		try {
+			data.push(await prisma.testimonials.update({
+				where: { id: rec },
+				data: { stale: false },
+				select: { id: true },
+			}));
+		} catch (err) {
+			Logger.error(err);
+			Logger.error('error on update');
+		}
+	}
   return data;
 };
 
