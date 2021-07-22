@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 // import config
 import { WebClient } from '@slack/web-api';
-import config  from '../config/index.js';
+import config from '../config/index.js';
 
 // initialise constants
 const slackBotToken = config.slack.bot_token;
@@ -46,15 +46,22 @@ async function replaceMentionedUsers(text) {
   let t = text;
   const matches = text.matchAll('\<([^>]*)\>');
   const mentionedUsers = [];
-  for (const match of matches) {
-    if (match[1].substring(1)[0] == 'U') {
+  [...matches].forEach((match) => {
+    if (match[1].substring(1)[0] === 'U') {
       mentionedUsers.push(match[1].substring(1));
     }
-  }
-  for (const user of mentionedUsers) {
-    const name = (await slackClient.users.info({ user })).user.real_name.replace(/ /g, '');
-    t = t.replace(`<@${user}>`, `@${name}`);
-  }
+  });
+  let users = [];
+  // eslint-disable-next-line prefer-const
+  let userPromises = [];
+  mentionedUsers.forEach((user) => {
+    userPromises.push(slackClient.users.info({ user }));
+  });
+  users = await Promise.all(userPromises);
+  users.forEach((u) => {
+    const user = u.user.real_name.replace(/ /g, '');
+    t = t.replace(`<@${user.id}>`, `@${user}`);
+  });
   return t;
 }
 

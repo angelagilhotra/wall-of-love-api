@@ -18,13 +18,13 @@ export const parseAndGenerateObject = (obj) => {
     source: '',
   };
   const keys = Object.keys(testimonialObject);
-  for (const key of keys) {
+  keys.forEach((key) => {
     testimonialObject[key] = obj[key];
-  }
-  for (const source of supportedFormats) {
+  });
+  supportedFormats.forEach((source) => {
     if (obj.link.includes(source)) testimonialObject.source = source;
-  }
-	return testimonialObject
+  });
+  return testimonialObject;
 };
 
 export const parseSource = async (obj) => {
@@ -94,19 +94,21 @@ export const fetchRaw = async () => prisma.testimonials.findMany({
 });
 
 export const markTestimonialsNotStale = async ({ recordIds }) => {
-  const data = [];
-	for (const rec of recordIds) {
-		try {
-			data.push(await prisma.testimonials.update({
-				where: { id: rec },
-				data: { stale: false },
-				select: { id: true },
-			}));
-		} catch (err) {
-			Logger.error(err);
-			Logger.error('error on update');
-		}
-	}
+  let data = [];
+  const updates = [];
+  recordIds.forEach((rec) => {
+    try {
+      updates.push(prisma.testimonials.update({
+        where: { id: rec },
+        data: { stale: false },
+        select: { id: true },
+      }));
+    } catch (err) {
+      Logger.error(err);
+      Logger.error('error on update');
+    }
+  });
+  data = await Promise.all(updates);
   return data;
 };
 
