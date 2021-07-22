@@ -11,6 +11,16 @@
         "sourceType": "module"
     },
     "rules": {
-			"import/extensions": "always"
+			"import/extensions": [
+				"error",
+				"ignorePackages",
+       {
+         "js": "always",
+         "jsx": "never",
+         "ts": "never",
+         "tsx": "never"
+       }
+			],
+			"eol-last": "error"
     }
 }
