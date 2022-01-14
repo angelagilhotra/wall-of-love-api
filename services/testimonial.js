@@ -88,9 +88,6 @@ export const fetchRaw = async () => prisma.testimonials.findMany({
   orderBy: {
     id: 'asc',
   },
-  where: {
-    stale: false,
-  },
 });
 
 export const markTestimonialsNotStale = async ({ recordIds }) => {

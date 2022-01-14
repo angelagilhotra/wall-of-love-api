@@ -14,5 +14,4 @@ model testimonials {
 	author_name  String? @db.VarChar
   text         String? @db.VarChar
   author_image String? @db.VarChar
-	stale				 Boolean @db.Boolean @default(true)
 }

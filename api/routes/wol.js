@@ -1,7 +1,7 @@
 // import dependencies
 import { Router } from 'express';
 import parseAndRespond from '../middlewares/parseAndRespond.js';
-import { parseAndUploadTestimonials, fetchTestimonialsRaw, updateStale } from '../../controllers/testimonialsController.js';
+import { parseAndUploadTestimonials, fetchTestimonialsRaw } from '../../controllers/testimonialsController.js';
 import { respondToSlackChallenge, slackConfiguration } from '../../controllers/slackWorkflowController.js';
 import { uploadTestimonialToAirtable } from '../../controllers/airtableController.js';
 
@@ -41,7 +41,6 @@ export default (app) => {
       req.testimonialRecordIds = req.body.data;
       next();
     },
-    updateStale,
     parseAndRespond);
 
   /**
